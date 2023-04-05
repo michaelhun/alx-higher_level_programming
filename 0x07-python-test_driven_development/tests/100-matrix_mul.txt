@@ -185,14 +185,14 @@ integers or floats!
 
     >>> print(matrix_mul([[1, 2]], [[{"a": 1}, 8.8]]))
     Traceback (most recent call last):
-OAOAOA    TypeError: m_b should contain only integers or floats
-OAOAOA
-OAOAOA::
+    TypeError: m_b should contain only integers or floats
 
-OAOAOA    >>> print(matrix_mul([[1, "non-number"]], [[{"a": 1}, 8.8]]))
-OAOAOA    Traceback (most recent call last):
+::
+
+    >>> print(matrix_mul([[1, "non-number"]], [[{"a": 1}, 8.8]]))
+    Traceback (most recent call last):
     TypeError: m_a should contain only integers or floats
-OAOAOA
+
 Finally, the length of all rows in matrices ``m_a`` and ``m_b`` should be
 equivalent. Otherwise, a TypeError is raised.
 
@@ -206,12 +206,12 @@ equivalent. Otherwise, a TypeError is raised.
     ... [1, 2],
     ... [3, 4]
     ... ]
-OAOAOA    >>> print(matrix_mul(m_a, m_b))
+    >>> print(matrix_mul(m_a, m_b))
     Traceback (most recent call last):
-OAOAOA    TypeError: each row of m_a must should be of the same size
-OAOAOA
+    TypeError: each row of m_a must should be of the same size
+
 ::
-OAOAOA
+
     >>> m_a = [
     ... [1, 2],
     ... [3, 4]
