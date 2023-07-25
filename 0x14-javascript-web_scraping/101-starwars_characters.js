@@ -1,20 +1,32 @@
 #!/usr/bin/node
-const request = require('request');
-const url = 'https://swapi.dev/api/films/' + process.argv[2];
-request(url, function (error, response, body) {
-  if (!error) {
-    let characters = JSON.parse(body).characters;
-    printCharacters(characters, 0);
+
+// prints all characters of a Star Wars movie in the right order
+const req = require('request');
+
+const movieId = process.argv[2];
+const apiUrl = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
+
+req(apiUrl, (error, response, body) => {
+  if (error) {
+    console.error(error);
+  } else {
+    const charactersUrls = JSON.parse(body).characters;
+    printCharactersNames(charactersUrls, 0);
   }
 });
 
-function printCharacters(characters, index) {
-  request(characters[index], function (error, response, body) {
-    if (!error) {
-      console.log(JSON.parse(body).name);
-      if (index + 1 < characters.length) {
-        printCharacters(characters, index + 1);
-      }
+function printCharactersNames (charactersUrls, index) {
+  if (index >= charactersUrls.length) {
+    return;
+  }
+
+  req(charactersUrls[index], (error, response, body) => {
+    if (error) {
+      console.error(error);
+    } else {
+      const characterName = JSON.parse(body).name;
+      console.log(characterName);
+      printCharactersNames(charactersUrls, index + 1);
     }
   });
 }
