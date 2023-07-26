@@ -1,25 +1,58 @@
 #!/usr/bin/node
 
 const request = require('request');
+const url = process.argv[2];
 
-request(process.argv[2], function (err, _res, body) {
-  if (err) {
-    console.log(err);
-  } else {
-    const completedTasksByUsers = {};
-    body = JSON.parse(body);
+request.get(url, { json: true }, (error, response, body) => {
+  if (error) {
+    console.log(error);
+    return;
+  }
 
-    for (let i = 0; i < body.length; ++i) {
-      const userId = body[i].userId;
-      const completed = body[i].completed;
+  if (response.statusCode !== 200) {
+    return;
+  }
 
-      if (completed && !completedTasksByUsers[userId]) {
-        completedTasksByUsers[userId] = 0;
+  const data = {};
+  body.forEach((todo) => {
+    if (todo.completed) {
+      if (!data[todo.userId]) {
+        data[todo.userId] = 1;
+      } else {
+        data[todo.userId]++;
       }
-
-      if (completed) ++completedTasksByUsers[userId];
     }
-
-    console.log(completedTasksByUsers);
+  });
+  let index = 0;
+  const length = Object.keys(data).length;
+  if (length === 0) {
+    console.log('{}');
+    return;
+  }
+  for (const key in data) {
+    if (index === 0) {
+      if (length !== 1) {
+        if (length === 2) {
+          process.stdout.write('{ \'' + key + '\': ' + data[key] + ',');
+        } else {
+          console.log('{ \'' + key + '\': ' + data[key] + ',');
+        }
+      } else {
+        console.log('{ \'' + key + '\': ' + data[key] + ' }');
+      }
+    } else if (index === length - 1) {
+      if (length === 2) {
+        process.stdout.write(' \'' + key + '\': ' + data[key] + ' }');
+      } else {
+        console.log('  \'' + key + '\': ' + data[key] + ' }');
+      }
+    } else {
+      if (length === 2) {
+        process.stdout.write(`  '${key}': ${data[key]},`);
+      } else {
+        console.log(`  '${key}': ${data[key]},`);
+      }
+    }
+    index++;
   }
 });
